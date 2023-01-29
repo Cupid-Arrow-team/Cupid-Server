@@ -56,6 +56,7 @@ public class Report extends BaseTimeEntity {
         changeType(updateReport.getReportType());
     }
 
+
     private void changeTitle(final String title) { this.reportTitle = title; }
 
     private void changeBody(final String body) { this.reportBody = body; }
