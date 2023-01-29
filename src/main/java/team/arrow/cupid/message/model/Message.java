@@ -21,6 +21,7 @@ public class Message extends BaseEntity {
 
     private String message;
 
+    private boolean isRead = false;
     private LocalDateTime readTime;
 
     public Message(Long senderId, Long receiverId, String message) {
@@ -30,6 +31,7 @@ public class Message extends BaseEntity {
     }
 
     public void readMessage() {
+        this.isRead = true;
         this.readTime = LocalDateTime.now();
     }
 
