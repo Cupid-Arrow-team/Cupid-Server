@@ -8,60 +8,58 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
-@Builder
-@Table(name = "report_table")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Report extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_id")
-    private Long reportId;
+    @Column(name = "report_id", updatable = false)
+    private Long id;
 
-    @Column(name = "report_title", length = 30)
-    private String reportTitle;
+    @Column(name = "title", length = 30, unique = true)
+    private String title;
 
-    @Column(name = "report_body")
-    private String reportBody;
+    @Column(name = "content")
+    private String content;
 
-    @Column(name = "report_user_id")
-    private Long reportUserId;
+    @Column(name = "targetUserId")
+    private Long targetUserId;
 
     //회원 테이블
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_type_id")
+    @Enumerated(EnumType.STRING)
+    @JoinColumn(name = "report_type")
     private ReportType reportType;
 
-    public Report() {
-
-    }
-
-    public Report(String reportTitle, String reportBody, Long reportUserId, ReportType reportType) {
-        this.reportTitle = reportTitle;
-        this.reportBody = reportBody;
-        this.reportUserId = reportUserId;
+    @Builder
+    public Report(String title, String content, Long targetUserId, ReportType reportType) {
+        this.title = title;
+        this.content = content;
+        this.targetUserId = targetUserId;
         this.reportType = reportType;
     }
 
-    public Report createReport(
-            final String reportTitle, final String reportBody, final Long reportUserId, final ReportType reportType
-    ) {
-        return new Report(reportTitle, reportBody, reportUserId, reportType);
-    }
-
     public void updateReport(final Report updateReport) { // updateReport => updateReportDto 로 만든 Report 객체
-        changeTitle(updateReport.getReportTitle());
-        changeBody(updateReport.getReportBody());
-        changeReportUserId(updateReport.getReportUserId());
-        changeType(updateReport.getReportType());
+        this.title = updateReport.getTitle();
+        this.content = updateReport.getContent();
+        this.targetUserId = updateReport.getTargetUserId();
+        this.reportType = updateReport.getReportType();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        // 자기 자신의 참조 값과 o 동일성 비교
 
-    private void changeTitle(final String title) { this.reportTitle = title; }
+        if (id == null || !(o instanceof Report)) return false;
+        // id가 null이 아니고 o가 Report에 속하지 않을 때
 
-    private void changeBody(final String body) { this.reportBody = body; }
+        final Report report = (Report) o;
 
-    private void changeReportUserId(final Long userId) { this.reportUserId = userId; }
+        return id.equals(report.getId());
+    }
 
-    private void changeType(final ReportType type) { this.reportType = type; }
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }
