@@ -18,7 +18,7 @@ public class Report extends BaseTimeEntity {
     @Column(name = "title", length = 30, unique = true)
     private String title;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 300)
     private String content;
 
     @Column(name = "targetUserId")
@@ -27,7 +27,7 @@ public class Report extends BaseTimeEntity {
     //회원 테이블
 
     @Enumerated(EnumType.STRING)
-    @JoinColumn(name = "report_type")
+    @Column(name = "report_type")
     private ReportType reportType;
 
     @Builder
@@ -61,5 +61,5 @@ public class Report extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
-    }
+    } // id 존재 여부로 해시키 리턴
 }
