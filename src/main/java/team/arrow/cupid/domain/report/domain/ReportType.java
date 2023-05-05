@@ -1,32 +1,22 @@
 package team.arrow.cupid.domain.report.domain;
 
-import lombok.*;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Entity
+
 @Getter
-@Builder
-@Table(name = "report_type_table")
-public class ReportType {
+public enum ReportType {
+    REVENGE_PORNO("음란물 유포"),
+    FRAUD_AND_BLACKMAIL("사기 및 협박");
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "report_type_id")
-    private Long reportTypeId;
+    private String reason;
 
-    @Column(name = "report_type", length = 20)
-    private String reportType;
-
-    @OneToMany(mappedBy = "reportType")
-    private List<Report> report = new ArrayList<>();
-
-    public ReportType() {
-    }
-
-    public ReportType(Long reportTypeId, String reportType) {
-        this.reportTypeId = reportTypeId;
-        this.reportType = reportType;
+    /**
+     * enum class는 상수들의 집합으로 컴파일 시, 이미 모든 값을 알아야하고
+     * 외부에서 호출 될 수가 없기 때문에 생성자를 private으로 선언 해야 함.
+     */
+    private ReportType(String reason) {
+        this.reason = reason;
     }
 }
